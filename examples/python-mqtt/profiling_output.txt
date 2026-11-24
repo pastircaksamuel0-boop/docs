@@ -1,0 +1,47 @@
+============================================================
+cProfile: make_client()
+============================================================
+         187917 function calls (187907 primitive calls) in 0.105 seconds
+
+   Ordered by: cumulative time
+   List reduced from 44 to 10 due to restriction <10>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+     1000    0.005    0.000    0.105    0.000 /home/samo/Desktop/Evolucia/docs/examples/python-mqtt/main.py:31(make_client)
+     4000    0.008    0.000    0.085    0.000 /usr/lib/python3.12/unittest/mock.py:1129(__call__)
+     4000    0.026    0.000    0.068    0.000 /usr/lib/python3.12/unittest/mock.py:1140(_increment_mock_call)
+14016/14008    0.010    0.000    0.017    0.000 /usr/lib/python3.12/unittest/mock.py:767(__setattr__)
+    14000    0.010    0.000    0.016    0.000 /usr/lib/python3.12/unittest/mock.py:2508(__new__)
+2005/2003    0.005    0.000    0.009    0.000 /usr/lib/python3.12/unittest/mock.py:653(__getattr__)
+     4000    0.003    0.000    0.009    0.000 /usr/lib/python3.12/unittest/mock.py:1137(_mock_call)
+    16000    0.004    0.000    0.007    0.000 /usr/lib/python3.12/unittest/mock.py:332(_get)
+    14000    0.006    0.000    0.006    0.000 /usr/lib/python3.12/unittest/mock.py:2540(__init__)
+     4000    0.003    0.000    0.006    0.000 /usr/lib/python3.12/unittest/mock.py:1186(_execute_mock_call)
+
+
+
+============================================================
+timeit: make_client()  x1000 iterations
+============================================================
+BEFORE optimisation: 0.0443s  (44.25 µs/call)
+
+============================================================
+timeit: on_connect()  x1000 iterations
+============================================================
+on_connect: 0.0016s  (1.57 µs/call)
+
+============================================================
+Bottleneck analysis
+============================================================
+make_client  : 0.0443s  (96.6%)
+on_connect   : 0.0016s  (3.4%)
+
+Conclusion: make_client() dominates because it creates a new ssl
+context on every call.  Caching the context avoids redundant work.
+
+============================================================
+timeit: make_client_optimised()  x1000 iterations (AFTER)
+============================================================
+AFTER  optimisation: 0.0221s  (22.09 µs/call)
+
+Improvement: 50.1%  (0.0443s  →  0.0221s)
